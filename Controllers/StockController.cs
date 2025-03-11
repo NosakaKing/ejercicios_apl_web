@@ -10,22 +10,23 @@ using SistemaInventario.Models;
 
 namespace SistemaInventario.Controllers
 {
-    public class CategoryModelsController : Controller
+    public class StockController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CategoryModelsController(ApplicationDbContext context)
+        public StockController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: CategoryModels
+        // GET: Stock
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Category.ToListAsync());
+            var applicationDbContext = _context.Stock.Include(s => s.Product).Include(s => s.Proveedor);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: CategoryModels/Details/5
+        // GET: Stock/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +34,45 @@ namespace SistemaInventario.Controllers
                 return NotFound();
             }
 
-            var categoryModel = await _context.Category
+            var stockModel = await _context.Stock
+                .Include(s => s.Product)
+                .Include(s => s.Proveedor)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (categoryModel == null)
+            if (stockModel == null)
             {
                 return NotFound();
             }
 
-            return View(categoryModel);
+            return View(stockModel);
         }
 
-        // GET: CategoryModels/Create
+        // GET: Stock/Create
         public IActionResult Create()
         {
+            ViewData["ProductId"] = new SelectList(_context.Productos, "Id", "NombreProducto");
+            ViewData["ProveedorId"] = new SelectList(_context.Proveedor, "Id", "CorreoElectronico");
             return View();
         }
 
-        // POST: CategoryModels/Create
+        // POST: Stock/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description")] CategoryModel categoryModel)
+        public async Task<IActionResult> Create([Bind("Id,Cantidad,FechaFabricacion,FechaVencimiento,FechaIngreso,ProductId,ProveedorId")] StockModel stockModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(categoryModel);
+                _context.Add(stockModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(categoryModel);
+            ViewData["ProductId"] = new SelectList(_context.Productos, "Id", "Id", stockModel.ProductId);
+            ViewData["ProveedorId"] = new SelectList(_context.Proveedor, "Id", "CorreoElectronico", stockModel.ProveedorId);
+            return View(stockModel);
         }
 
-        // GET: CategoryModels/Edit/5
+        // GET: Stock/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +80,24 @@ namespace SistemaInventario.Controllers
                 return NotFound();
             }
 
-            var categoryModel = await _context.Category.FindAsync(id);
-            if (categoryModel == null)
+            var stockModel = await _context.Stock.FindAsync(id);
+            if (stockModel == null)
             {
                 return NotFound();
             }
-            return View(categoryModel);
+            ViewData["ProductId"] = new SelectList(_context.Productos, "Id", "NombreProducto", stockModel.ProductId);
+            ViewData["ProveedorId"] = new SelectList(_context.Proveedor, "Id", "CorreoElectronico", stockModel.ProveedorId);
+            return View(stockModel);
         }
 
-        // POST: CategoryModels/Edit/5
+        // POST: Stock/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] CategoryModel categoryModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Cantidad,FechaFabricacion,FechaVencimiento,FechaIngreso,ProductId,ProveedorId")] StockModel stockModel)
         {
-            if (id != categoryModel.Id)
+            if (id != stockModel.Id)
             {
                 return NotFound();
             }
@@ -97,12 +106,12 @@ namespace SistemaInventario.Controllers
             {
                 try
                 {
-                    _context.Update(categoryModel);
+                    _context.Update(stockModel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryModelExists(categoryModel.Id))
+                    if (!StockModelExists(stockModel.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +122,12 @@ namespace SistemaInventario.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(categoryModel);
+            ViewData["ProductId"] = new SelectList(_context.Productos, "Id", "Id", stockModel.ProductId);
+            ViewData["ProveedorId"] = new SelectList(_context.Proveedor, "Id", "CorreoElectronico", stockModel.ProveedorId);
+            return View(stockModel);
         }
 
-        // GET: CategoryModels/Delete/5
+        // GET: Stock/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,34 +135,36 @@ namespace SistemaInventario.Controllers
                 return NotFound();
             }
 
-            var categoryModel = await _context.Category
+            var stockModel = await _context.Stock
+                .Include(s => s.Product)
+                .Include(s => s.Proveedor)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (categoryModel == null)
+            if (stockModel == null)
             {
                 return NotFound();
             }
 
-            return View(categoryModel);
+            return View(stockModel);
         }
 
-        // POST: CategoryModels/Delete/5
+        // POST: Stock/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var categoryModel = await _context.Category.FindAsync(id);
-            if (categoryModel != null)
+            var stockModel = await _context.Stock.FindAsync(id);
+            if (stockModel != null)
             {
-                _context.Category.Remove(categoryModel);
+                _context.Stock.Remove(stockModel);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryModelExists(int id)
+        private bool StockModelExists(int id)
         {
-            return _context.Category.Any(e => e.Id == id);
+            return _context.Stock.Any(e => e.Id == id);
         }
     }
 }

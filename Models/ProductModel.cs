@@ -1,22 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SistemaInventario.Models
 {
     public class ProductModel
     {
         public int Id { get; set; }
-        [Required]
-        public string Name { get; set; }
-        [Required]
-        public string Description { get; set; }
-        [Required]
-        [Precision(18, 2)]
-        public decimal Price { get; set; }
-        [Required]
-        public int Stock { get; set; }
-        [Required]
-        public int CategoryId { get; set; }
-        public CategoryModel? Category { get; set; }
+        [Display(Name = "Nombre del Producto")]
+        [MinLength(3)]
+        public string NombreProducto { get; set; }
+        [Display(Name = "Presentación del Producto")]
+        [MinLength(3)]
+        public string Presentacion { get; set; }
+        [Display(Name = "Codigo de Barras")]
+        [MinLength(5)]
+        public string CodigoBarras { get; set; }
+        public int CategoriaId { get; set; }
+        public CategoryModel? Categoria { get; set; }
     }
 }

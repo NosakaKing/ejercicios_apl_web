@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SistemaInventario.Models.ProductModel>
+﻿@model IEnumerable<SistemaInventario.Models.ProveedorModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,16 +13,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NombreProducto)
+                @Html.DisplayNameFor(model => model.NombreProveedor)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Presentacion)
+                @Html.DisplayNameFor(model => model.Direccion)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CodigoBarras)
+                @Html.DisplayNameFor(model => model.Telefono)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Categoria)
+                @Html.DisplayNameFor(model => model.CorreoElectronico)
             </th>
             <th></th>
         </tr>
@@ -31,16 +31,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.NombreProducto)
+                @Html.DisplayFor(modelItem => item.NombreProveedor)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Presentacion)
+                @Html.DisplayFor(modelItem => item.Direccion)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CodigoBarras)
+                @Html.DisplayFor(modelItem => item.Telefono)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Categoria.Name)
+                @Html.DisplayFor(modelItem => item.CorreoElectronico)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
