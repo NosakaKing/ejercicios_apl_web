@@ -16,5 +16,8 @@ namespace SistemaInventario.Data
         public DbSet<CategoryModel> Categoria { get; set; }
         public DbSet<StockModel> Stock { get; set; }
         public DbSet<ProveedorModel> Proveedor { get; set; }
+        public DbSet<InvoiceModel> Invoice { get; set; }
+        public DbSet<InvoiceDetailModel> InvoiceDetail { get; set; }
+        public DbSet<ClientModel> Client { get; set; }
     }
 }

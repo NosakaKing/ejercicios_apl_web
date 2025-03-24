@@ -1,0 +1,166 @@
+﻿@model IEnumerable<SistemaInventario.Models.InvoiceDetailModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<div class="row-cols-2">
+    <div class="col-md-6">
+        <label class="control-label">Clientes</label>
+        <select class="form-select" onchange="unCliente()" id="listacliente">
+            <option value="0">Seleccione una opción</option>
+        </select>
+        <button class="btn btn-primary" onclick="nuevoCliente()">Nuevo Cliente</button>
+        <input hidden value="0" id="nuevoCliente"/>
+
+    </div>
+    <div class="col-md-6">
+        <table class="table table-bordered table-responsive table-striped">
+            <tr>
+                <td>
+                    <label>Nombre del cliente</label>
+                </td>
+                <td>
+                    <label>Dirección</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input disabled class="form-control" id="nombreCliente" />
+                </td>
+                <td>
+                    <input disabled class="form-control" id="direccionCliente" />
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Telefono</label>
+                </td>
+                <td>
+                    <label> Correo Electronico</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input disabled class="form-control" id="telefonoCliente" />
+
+                </td>
+                <td>
+                    <input disabled class="form-control" id="emailCliente" />
+                </td>
+        </table>
+        <button id="cancelar" onclick="limpiarCampos()" class="btn-danger">Cancelar</button>
+        <button onclick="listaProductos()" class="btn-primary" data-bs-toggle="modal" data-bs-target="#modalProducto">Agregar Productos</button>
+
+        <table>
+            <thead>
+            <tr>
+            <td>#</td>
+            <td>Nombre del Producto</td>
+            <td>Cantidad</td>
+            <td>Precio Unitario</td>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table table-responsive table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Cantidad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Valor)
+            </th>
+            <th>
+                Nombre del Producto
+            </th>
+            <th>
+                Numero de Factura
+            </th>
+            <th>
+                Fecha de fabricación
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cantidad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Valor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductModel.NombreProducto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InvoiceModel.NumeroFactura)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StockModel.FechaFabricacion)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+
+<div class="modal fade" id="modalProducto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Lista de Productos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class=" modal-body">
+                <div class="mb-3">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td>Buscador</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="text" class="form-control" value="" id="buscador" />
+                                <button class="btn btn-primary" onclick="buscarProducto()">Buscar</button>
+                            </td>
+                        </tr>
+                       <tr>
+                           <table class="table table-bordered table-responsive table-striped">
+                               <thead>
+                                   <tr>
+                                       <td>#</td>
+                                        <td>Nombre del Producto</td>
+                                        <td>Cantidad</td>
+                                        <td>Valor</td>
+                                   </tr>
+                               </thead>
+                                <tbody id="listaProductos">
+                                </tbody>
+                           </table>
+                       </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn_agregar" class="btn btn-primary">Agregar Producto</button>
+
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </div>

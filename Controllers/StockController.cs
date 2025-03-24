@@ -26,6 +26,25 @@ namespace SistemaInventario.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        // POST STOCK
+        public Boolean controlarStock(int id, int cantidad)
+        {
+           var cn = _context.Stock.FirstOrDefault(st => st.Id == id);
+            if (cn ==  null)
+            {
+                return false;
+            }
+            if (cn.Cantidad >= cantidad)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+            }
+
         // GET: Stock/Details/5
         public async Task<IActionResult> Details(int? id)
         {

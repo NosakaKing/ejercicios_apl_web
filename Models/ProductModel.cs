@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SistemaInventario.Models
 {
@@ -15,6 +16,7 @@ namespace SistemaInventario.Models
         [MinLength(5)]
         public string CodigoBarras { get; set; }
         public int CategoriaId { get; set; }
+        [ForeignKey("CategoriaId")]
         public CategoryModel? Categoria { get; set; }
     }
 }

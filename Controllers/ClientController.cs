@@ -10,28 +10,32 @@ using SistemaInventario.Models;
 
 namespace SistemaInventario.Controllers
 {
-    public class ProductController : Controller
+    public class ClientController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ProductController(ApplicationDbContext context)
+        public ClientController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Product
+        // GET: Client
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Productos.Include(p => p.Categoria);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.Client.ToListAsync());
         }
 
-        public List<StockModel> ListaProductos()
+        public List<ClientModel> ListaClientes()
         {
-            return _context.Stock.Include(pd => pd.Product).ToList();
+            return _context.Client.ToList();
         }
 
-        // GET: Product/Details/5
+        public ClientModel UnCliente(int id)
+        {
+            return _context.Client.FirstOrDefault(cliente => cliente.Id == id);
+        }
+
+        // GET: Client/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -39,42 +43,39 @@ namespace SistemaInventario.Controllers
                 return NotFound();
             }
 
-            var productModel = await _context.Productos
-                .Include(p => p.Categoria)
+            var clientModel = await _context.Client
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (productModel == null)
+            if (clientModel == null)
             {
                 return NotFound();
             }
 
-            return View(productModel);
+            return View(clientModel);
         }
 
-        // GET: Product/Create
+        // GET: Client/Create
         public IActionResult Create()
         {
-            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "Id", "Name");
             return View();
         }
 
-        // POST: Product/Create
+        // POST: Client/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NombreProducto,Presentacion,CodigoBarras,CategoriaId")] ProductModel productModel)
+        public async Task<IActionResult> Create([Bind("Id,Nombre,Direccion,Telefono,email")] ClientModel clientModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(productModel);
+                _context.Add(clientModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "Id", "Name", productModel.CategoriaId);
-            return View(productModel);
+            return View(clientModel);
         }
 
-        // GET: Product/Edit/5
+        // GET: Client/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,23 +83,22 @@ namespace SistemaInventario.Controllers
                 return NotFound();
             }
 
-            var productModel = await _context.Productos.FindAsync(id);
-            if (productModel == null)
+            var clientModel = await _context.Client.FindAsync(id);
+            if (clientModel == null)
             {
                 return NotFound();
             }
-            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "Id", "Name", productModel.CategoriaId);
-            return View(productModel);
+            return View(clientModel);
         }
 
-        // POST: Product/Edit/5
+        // POST: Client/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NombreProducto,Presentacion,CodigoBarras,CategoriaId")] ProductModel productModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Direccion,Telefono,email")] ClientModel clientModel)
         {
-            if (id != productModel.Id)
+            if (id != clientModel.Id)
             {
                 return NotFound();
             }
@@ -107,12 +107,12 @@ namespace SistemaInventario.Controllers
             {
                 try
                 {
-                    _context.Update(productModel);
+                    _context.Update(clientModel);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductModelExists(productModel.Id))
+                    if (!ClientModelExists(clientModel.Id))
                     {
                         return NotFound();
                     }
@@ -123,11 +123,10 @@ namespace SistemaInventario.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoriaId"] = new SelectList(_context.Categoria, "Id", "Name", productModel.CategoriaId);
-            return View(productModel);
+            return View(clientModel);
         }
 
-        // GET: Product/Delete/5
+        // GET: Client/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,35 +134,34 @@ namespace SistemaInventario.Controllers
                 return NotFound();
             }
 
-            var productModel = await _context.Productos
-                .Include(p => p.Categoria)
+            var clientModel = await _context.Client
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (productModel == null)
+            if (clientModel == null)
             {
                 return NotFound();
             }
 
-            return View(productModel);
+            return View(clientModel);
         }
 
-        // POST: Product/Delete/5
+        // POST: Client/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var productModel = await _context.Productos.FindAsync(id);
-            if (productModel != null)
+            var clientModel = await _context.Client.FindAsync(id);
+            if (clientModel != null)
             {
-                _context.Productos.Remove(productModel);
+                _context.Client.Remove(clientModel);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductModelExists(int id)
+        private bool ClientModelExists(int id)
         {
-            return _context.Productos.Any(e => e.Id == id);
+            return _context.Client.Any(e => e.Id == id);
         }
     }
 }

@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SistemaInventario.Data;
 
 #nullable disable
 
-namespace SistemaInventario.Data.Migrations
+namespace SistemaInventario.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250324160549_base")]
+    partial class @base
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,6 +247,93 @@ namespace SistemaInventario.Data.Migrations
                     b.ToTable("Categoria");
                 });
 
+            modelBuilder.Entity("SistemaInventario.Models.ClientModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Client");
+                });
+
+            modelBuilder.Entity("SistemaInventario.Models.InvoiceDetailModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InvoiceModelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductModelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StockModelId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Valor")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvoiceModelId");
+
+                    b.HasIndex("ProductModelId");
+
+                    b.HasIndex("StockModelId");
+
+                    b.ToTable("InvoiceDetail");
+                });
+
+            modelBuilder.Entity("SistemaInventario.Models.InvoiceModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClientesModelId")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly>("FechaIngreso")
+                        .HasColumnType("date");
+
+                    b.Property<int>("NumeroFactura")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientesModelId");
+
+                    b.ToTable("Invoice");
+                });
+
             modelBuilder.Entity("SistemaInventario.Models.ProductModel", b =>
                 {
                     b.Property<int>("Id")
@@ -387,6 +477,44 @@ namespace SistemaInventario.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SistemaInventario.Models.InvoiceDetailModel", b =>
+                {
+                    b.HasOne("SistemaInventario.Models.InvoiceModel", "InvoiceModel")
+                        .WithMany()
+                        .HasForeignKey("InvoiceModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SistemaInventario.Models.ProductModel", "ProductModel")
+                        .WithMany()
+                        .HasForeignKey("ProductModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SistemaInventario.Models.StockModel", "StockModel")
+                        .WithMany()
+                        .HasForeignKey("StockModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InvoiceModel");
+
+                    b.Navigation("ProductModel");
+
+                    b.Navigation("StockModel");
+                });
+
+            modelBuilder.Entity("SistemaInventario.Models.InvoiceModel", b =>
+                {
+                    b.HasOne("SistemaInventario.Models.ClientModel", "ClientesModel")
+                        .WithMany()
+                        .HasForeignKey("ClientesModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClientesModel");
                 });
 
             modelBuilder.Entity("SistemaInventario.Models.ProductModel", b =>
