@@ -46,25 +46,52 @@
                             <td>${index + 1}</td>
                             <td>${stock.product.nombreProducto}</td>
                             <td>
-                            <input type="number" class="form-control" id="stock-${stock.id}" onfocusout="controlarStock(this)" value="1" style="width: 50px">
+                        <input type="number" id="stock-${stock.id}" onfocusout="controlarStock(this)" class="form-control" style="width:60px">
                             </td>
-                            <td>${stock.precioUnitario}</td>
+                            <td>${stock.cantidad}</td>
                             <td>${stock.precioVenta}</td><
-<td><button class="btn btn-primary" onclick="cargarProductosLista(${stock.id}, ${stock.precioVenta})">Agregar</button></td>
+                            <td><button class="btn btn-primary" onclick="cargarProductosLista(${stock.id}, '${stock.product.nombreProducto}', ${stock.precioVenta})">Agregar</button></td>
+                            </td>
                         </tr>`
             })
             $("#listaProductos").html(html)
         })
     }
 
-    cargarProductosLista(id, precio) {
+    buscarProducto() {
+        var textoBusqueda = $("#buscador").val().toLowerCase();
+        $("#listaProductos tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(textoBusqueda) > -1);
+        });
+    }
+
+    cargarProductosLista(id, nombre, precio) {
+        console.log(id + "esta es el id")
         var cantidad = $(`#stock-${id}`).val()
-        console.log(cantidad)
+        console.log(cantidad + "esto es la cantidad")
         if (!cantidad || cantidad <= 0) {
             alert("Ingrese una cantidad valida")
             return
         }
-        alert(cantidad * precio)
+        var html = `<tr>
+            <td>
+            #
+            </td>
+            <td>
+            ${nombre}
+            </td>
+            <td>
+            ${precio}
+            </td>
+            <td>
+            ${cantidad}
+            </td>
+            <td>
+            ${precio * cantidad}
+            </td>
+            </tr>`
+        $("#listaProductosFactura").append(html)
+        $("#modalProducto").modal("hide")
     }
 
 
@@ -73,7 +100,7 @@
         id = id.split("-")
        
         console.log(id + "stock")
-        $.post("Stock/controlarStock", { id: id, cantidad: cantidad }, (dato) => {
+        $.post("Stock/controlarStock", { id: id[1], cantidad: cantidad }, (dato) => {
             if (!dato) {
                 alert("No se encuentra la cantidad en stock")
                 $("#btn_agregar").prop("disabled", true)

@@ -30,16 +30,21 @@ var controlarStock = (caja) => {
     var controlarStock = new InvoiceDetail()
     controlarStock.controlarStock(caja.id, caja.value)
 
-    console.log(caja.id)
-    console.log(caja.value)
 }
 
-var cargarProductosLista = (id, precio) => {
+var cargarProductosLista = (id, nombre, precio) => {
     var cargarProductosLista = new InvoiceDetail()
-    cargarProductosLista.cargarProductosLista()
+    cargarProductosLista.cargarProductosLista(id, nombre, precio)
+
+    console.log(id, nombre, precio)
 }
 
 var limpiarCampos = () => {
     var limpiarCampos = new InvoiceDetail()
     limpiarCampos.limpiarCampos()
+}
+
+var buscarProducto = () => {
+    var buscarProducto = new InvoiceDetail()
+    buscarProducto.buscarProducto()
 }

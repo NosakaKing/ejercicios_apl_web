@@ -55,7 +55,7 @@
         <button id="cancelar" onclick="limpiarCampos()" class="btn-danger">Cancelar</button>
         <button onclick="listaProductos()" class="btn-primary" data-bs-toggle="modal" data-bs-target="#modalProducto">Agregar Productos</button>
 
-        <table>
+        <table class="table table-responsive table-bordered">
             <thead>
             <tr>
             <td>#</td>
@@ -64,7 +64,7 @@
             <td>Precio Unitario</td>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="listaProductosFactura">
             </tbody>
         </table>
     </div>
