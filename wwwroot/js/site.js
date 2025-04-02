@@ -48,3 +48,26 @@ var buscarProducto = () => {
     var buscarProducto = new InvoiceDetail()
     buscarProducto.buscarProducto()
 }
+
+var eliminarfila = (boton) => {
+    var eliminarfila = new InvoiceDetail()
+    eliminarfila.eliminarfila(boton)
+}
+
+var actualizarTotal = () => {
+    var actualizarTotal = new InvoiceDetail()
+    actualizarTotal.actualizarTotal()
+}
+
+var imprimirFactura = () => {
+    var contenidoOrignal = document.body.innerHTML;
+
+    var imprimir = document.getElementById("imprimir").innerHTML;
+
+    document.body.innerHTML = imprimir;
+
+    window.print();
+
+    document.body.innerHTML = contenidoOrignal;
+
+}

@@ -4,20 +4,20 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1 class="no-print">Index</h1>
 
-<div class="row-cols-2">
+<div class="row-cols-2" id="imprimir">
     <div class="col-md-6">
-        <label class="control-label">Clientes</label>
-        <select class="form-select" onchange="unCliente()" id="listacliente">
+        <label class="control-label no-print">Clientes</label>
+        <select class="form-select no-print" onchange="unCliente()" id="listacliente">
             <option value="0">Seleccione una opción</option>
         </select>
-        <button class="btn btn-primary" onclick="nuevoCliente()">Nuevo Cliente</button>
+        <button class="btn btn-primary no-print" onclick="nuevoCliente()">Nuevo Cliente</button>
         <input hidden value="0" id="nuevoCliente"/>
 
     </div>
     <div class="col-md-6">
-        <table class="table table-bordered table-responsive table-striped">
+        <table class="table table-bordered table-responsive table-striped todoelancho">
             <tr>
                 <td>
                     <label>Nombre del cliente</label>
@@ -28,10 +28,10 @@
             </tr>
             <tr>
                 <td>
-                    <input disabled class="form-control" id="nombreCliente" />
+                    <input disabled class="form-control no-print" id="nombreCliente" />
                 </td>
                 <td>
-                    <input disabled class="form-control" id="direccionCliente" />
+                    <input disabled class="form-control no-print" id="direccionCliente" />
 
                 </td>
             </tr>
@@ -45,28 +45,69 @@
             </tr>
             <tr>
                 <td>
-                    <input disabled class="form-control" id="telefonoCliente" />
+                    <input disabled class="form-control no-print" id="telefonoCliente" />
 
                 </td>
                 <td>
-                    <input disabled class="form-control" id="emailCliente" />
+                    <input disabled class="form-control no-print" id="emailCliente" />
                 </td>
         </table>
-        <button id="cancelar" onclick="limpiarCampos()" class="btn-danger">Cancelar</button>
-        <button onclick="listaProductos()" class="btn-primary" data-bs-toggle="modal" data-bs-target="#modalProducto">Agregar Productos</button>
+        <button id="cancelar" onclick="limpiarCampos()" class="btn-danger no-print">Cancelar</button>
+        <button onclick="listaProductos()" class="btn-primary no-print" data-bs-toggle="modal" data-bs-target="#modalProducto">Agregar Productos</button>
+        <button onclick="guardarFactura()" class="btn btn-success no-print">Guardar Factura</button>
+        <button onclick="imprimirFactura()" class="btn btn-primary no-print no-print">Imprimir Factura</button>
 
-        <table class="table table-responsive table-bordered">
+        <div class="col-md-12">
+        <table class="table table-responsive table-bordered table-striped todoelancho">
             <thead>
             <tr>
-            <td>#</td>
-            <td>Nombre del Producto</td>
-            <td>Cantidad</td>
-            <td>Precio Unitario</td>
+                        <th>
+                            #
+                        </th>
+                        <th>
+                            Cantidad
+                        </th>
+                        <th>
+                            Nombre Producto
+                        </th>
+                        <th>
+                            Precio Unitario
+                        </th>
+                        <th>
+                            Total
+                        </th>
+
             </tr>
             </thead>
             <tbody id="listaProductosFactura">
             </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" class="text-end">Subtotal:</td>
+                        <td id="subtotal">0.00</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-end">Descuento:</td>
+                        <td>
+                            <input id="descuentoId" onfocusouy="actualizarTotal()" class="form-control" type="number"
+                                   placeholder="5%" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-end">Descuento:</td>
+                        <td id="descuento">0.00</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-end">IVA 15%:</td>
+                        <td id="iva">0.00</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-end">Total a Pagar:</td>
+                        <td id="total">0.00</td>
+                    </tr>
+                </tfoot>
         </table>
+        </div>
     </div>
 </div>
 
